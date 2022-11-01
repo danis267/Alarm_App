@@ -35,7 +35,7 @@ public class AlarmJobIntentService extends JobIntentService {
     protected void onHandleWork(@NonNull Intent intent) {
 
         if (isStopped()) return;
-        SystemClock.sleep(30000);
+        SystemClock.sleep(300000);
 
 
         preferenceManager = new PreferenceManager(getApplicationContext());
