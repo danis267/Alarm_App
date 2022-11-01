@@ -3,6 +3,8 @@ package com.example.alarmapp;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -15,6 +17,10 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 public class AlarmJobIntentService extends JobIntentService {
+    public static Uri s;
+    public static Ringtone r;
+
+    private PreferenceManager preferenceManager;
 
     static void enqueueWork(Context context, Intent intent) {
         enqueueWork(context, AlarmJobIntentService.class, 123, intent);
@@ -29,10 +35,17 @@ public class AlarmJobIntentService extends JobIntentService {
     protected void onHandleWork(@NonNull Intent intent) {
 
         if (isStopped()) return;
+        SystemClock.sleep(30000);
 
-        int t = intent.getIntExtra("Timer", 10000);
 
-        SystemClock.sleep(t);
+        preferenceManager = new PreferenceManager(getApplicationContext());
+
+        if (preferenceManager.getString("uriString") == null) {
+            s = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+        } else {
+            s = Uri.parse(preferenceManager.getString("uriString"));
+        }
+
 
         Intent i = new Intent(this, MainActivity.class);
         PendingIntent p = PendingIntent.getActivity(this, 0, i, 0);
@@ -52,9 +65,11 @@ public class AlarmJobIntentService extends JobIntentService {
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
         managerCompat.notify(100, builder.build());
 
-        Uri s = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
 
-        Ringtone r = RingtoneManager.getRingtone(this, s);
+        AudioManager  audioManager=(AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        audioManager.adjustVolume(AudioManager.ADJUST_RAISE, AudioManager.FLAG_PLAY_SOUND);
+
+        r = RingtoneManager.getRingtone(this, s);
         r.play();
     }
 
