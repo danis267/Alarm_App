@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     Intent i = new Intent(MainActivity.this, AlarmJobIntentService.class);
-                                    Toast.makeText(MainActivity.this, "toast", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MainActivity.this, "snoozed for 5 minutes", Toast.LENGTH_SHORT).show();
                                     setAlarm();
                                     AlarmJobIntentService.enqueueWork(MainActivity.this, i);
                                     r.play();
