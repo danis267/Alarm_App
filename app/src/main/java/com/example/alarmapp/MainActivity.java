@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                                     r.play();
                                     setNotification();
                                 }
-                            }, 30000);
+                            }, 300000);
                         }
                     }).start();
                 }
